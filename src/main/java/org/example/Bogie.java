@@ -1,4 +1,5 @@
 package org.example;
+
 public class Bogie {
 
     private String type;
