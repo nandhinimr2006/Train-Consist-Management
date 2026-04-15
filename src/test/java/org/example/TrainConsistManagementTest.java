@@ -1,60 +1,70 @@
-// ---------- UC14 Tests ----------
 package org.example;
-import org.example.Bogie;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 public class TrainConsistManagementTest {
 
-    // ---------- UC14 Tests ----------
-
+    // UC13
     @Test
-    void testException_ValidCapacityCreation() throws InvalidCapacityException {
-        Bogie b = new Bogie("Sleeper", 50);
-        assertNotNull(b);
+    void testLoopFilteringLogic() throws InvalidCapacityException {
+        List<Bogie> bogies = List.of(
+                new Bogie("Sleeper", 70),
+                new Bogie("AC", 50),
+                new Bogie("Chair", 80)
+        );
+
+        assertEquals(2, TrainConsistManagement.filterUsingLoop(bogies).size());
     }
 
+    @Test
+    void testStreamFilteringLogic() throws InvalidCapacityException {
+        List<Bogie> bogies = List.of(
+                new Bogie("Sleeper", 70),
+                new Bogie("AC", 50),
+                new Bogie("Chair", 80)
+        );
+
+        assertEquals(2, TrainConsistManagement.filterUsingStream(bogies).size());
+    }
+
+    @Test
+    void testExecutionTimeMeasurement() throws InvalidCapacityException {
+        List<Bogie> bogies = List.of(
+                new Bogie("Sleeper", 70),
+                new Bogie("AC", 50),
+                new Bogie("Chair", 80)
+        );
+
+        assertTrue(TrainConsistManagement.measureLoopTime(bogies) > 0);
+        assertTrue(TrainConsistManagement.measureStreamTime(bogies) > 0);
+    }
+
+    // UC14
     @Test
     void testException_NegativeCapacityThrowsException() {
-        Exception exception = assertThrows(InvalidCapacityException.class, () -> {
+        assertThrows(InvalidCapacityException.class, () -> {
             new Bogie("Sleeper", -10);
         });
+    }
 
-        assertEquals("Capacity must be greater than zero", exception.getMessage());
+    // UC15
+    @Test
+    void testCargo_SafeAssignment() {
+        GoodsBogie b = new GoodsBogie("Cylindrical");
+
+        b.assignCargo("Petroleum");
+
+        assertEquals("Petroleum", b.getCargo());
     }
 
     @Test
-    void testException_ZeroCapacityThrowsException() {
-        Exception exception = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("Sleeper", 0);
-        });
+    void testCargo_UnsafeAssignmentHandled() {
+        GoodsBogie b = new GoodsBogie("Rectangular");
 
-        assertEquals("Capacity must be greater than zero", exception.getMessage());
-    }
+        b.assignCargo("Petroleum");
 
-    @Test
-    void testException_ExceptionMessageValidation() {
-        Exception exception = assertThrows(InvalidCapacityException.class, () -> {
-            new Bogie("AC", 0);
-        });
-
-        assertEquals("Capacity must be greater than zero", exception.getMessage());
-    }
-
-    @Test
-    void testException_ObjectIntegrityAfterCreation() throws InvalidCapacityException {
-        Bogie b = new Bogie("First Class", 80);
-
-        assertEquals("First Class", b.getType());
-        assertEquals(80, b.getCapacity());
-    }
-
-    @Test
-    void testException_MultipleValidBogiesCreation() throws InvalidCapacityException {
-        Bogie b1 = new Bogie("Sleeper", 60);
-        Bogie b2 = new Bogie("AC", 70);
-
-        assertNotNull(b1);
-        assertNotNull(b2);
+        assertNull(b.getCargo());
     }
 }

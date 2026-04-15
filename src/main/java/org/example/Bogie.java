@@ -6,9 +6,11 @@ public class Bogie {
     private int capacity;
 
     public Bogie(String type, int capacity) throws InvalidCapacityException {
+
         if (capacity <= 0) {
             throw new InvalidCapacityException("Capacity must be greater than zero");
         }
+
         this.type = type;
         this.capacity = capacity;
     }
@@ -19,5 +21,10 @@ public class Bogie {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    @Override
+    public String toString() {
+        return type + " - Capacity: " + capacity;
     }
 }
