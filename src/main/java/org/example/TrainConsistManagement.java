@@ -9,7 +9,7 @@ public class TrainConsistManagement {
         List<Bogie> result = new ArrayList<>();
 
         for (Bogie b : bogies) {
-            if (b.getCapacity() > 60) {
+            if (b.getCapacity() > 60) {   // ✔ correct usage
                 result.add(b);
             }
         }
@@ -20,41 +20,42 @@ public class TrainConsistManagement {
     // UC13 - Stream-based filtering
     public static List<Bogie> filterUsingStream(List<Bogie> bogies) {
         return bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
+                .filter(b -> b.getCapacity() > 60)   // ✔ correct usage
                 .toList();
     }
 
-    // UC13 - Measure loop execution time
+    // UC13 - Measure loop time
     public static long measureLoopTime(List<Bogie> bogies) {
         long start = System.nanoTime();
         filterUsingLoop(bogies);
         long end = System.nanoTime();
-
         return end - start;
     }
 
-    // UC13 - Measure stream execution time
+    // UC13 - Measure stream time
     public static long measureStreamTime(List<Bogie> bogies) {
         long start = System.nanoTime();
         filterUsingStream(bogies);
         long end = System.nanoTime();
-
         return end - start;
     }
 
-    // Demo main method
-    public static void main(String[] args) {
+    // Optional main method (for demo)
+    public static void main(String[] args) throws InvalidCapacityException {
 
         List<Bogie> bogies = new ArrayList<>();
 
-        for (int i = 0; i < 1000; i++) {
-            bogies.add(new Bogie("Sleeper", i + 50));
-        }
+        bogies.add(new Bogie("Sleeper", 70));
+        bogies.add(new Bogie("AC", 50));
+        bogies.add(new Bogie("Chair", 80));
 
-        long loopTime = measureLoopTime(bogies);
-        long streamTime = measureStreamTime(bogies);
+        System.out.println("Loop Result:");
+        System.out.println(filterUsingLoop(bogies));
 
-        System.out.println("Loop Time: " + loopTime + " ns");
-        System.out.println("Stream Time: " + streamTime + " ns");
+        System.out.println("Stream Result:");
+        System.out.println(filterUsingStream(bogies));
+
+        System.out.println("Loop Time: " + measureLoopTime(bogies));
+        System.out.println("Stream Time: " + measureStreamTime(bogies));
     }
 }
