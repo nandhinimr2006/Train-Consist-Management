@@ -17,26 +17,22 @@ public class GoodsBogie {
         return cargo;
     }
 
-    // UC15
     public void assignCargo(String cargo) {
-
         try {
             if (type.equalsIgnoreCase("Rectangular") &&
                     cargo.equalsIgnoreCase("Petroleum")) {
 
                 throw new CargoSafetyException(
-                        "Petroleum not allowed in Rectangular bogie"
+                        "Unsafe cargo assignment: Petroleum not allowed in Rectangular bogie"
                 );
             }
 
             this.cargo = cargo;
-            System.out.println("Cargo assigned: " + cargo);
 
         } catch (CargoSafetyException e) {
-            System.out.println("ERROR: " + e.getMessage());
-
+            System.out.println(e.getMessage());
         } finally {
-            System.out.println("Assignment process completed.\n");
+            System.out.println("Assignment completed");
         }
     }
 }
